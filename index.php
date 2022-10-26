@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 afterResponse(function () {
     $request = json_decode(file_get_contents("php://input"));
 
-    $client = new Client();
+    $client = new Client(json_decode(json_encode($request->client), true));
 
     $req = new Request($request->method, $request->url);
 
