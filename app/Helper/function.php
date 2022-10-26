@@ -1,4 +1,5 @@
 <?php
+header("Content-Type: application/json");
 
 function infoLog(string $data)
 {
@@ -20,7 +21,6 @@ function afterResponse(Closure $closure)
         "status" => "success"
     ]);
 
-    header("Content-Type: application/json");
     header('Connection: close');
     header('Content-Length: ' . ob_get_length());
 

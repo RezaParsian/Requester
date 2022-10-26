@@ -5,6 +5,14 @@ use GuzzleHttp\Psr7\Request;
 
 require 'vendor/autoload.php';
 
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    echo json_encode([
+        "status" => "alive"
+    ]);
+
+    die();
+};
+
 
 afterResponse(function () {
     $request = json_decode(file_get_contents("php://input"));
