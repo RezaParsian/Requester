@@ -19,14 +19,12 @@ use GuzzleHttp\Psr7\{Response};
  */
 final class ResponseData
 {
-    protected Client $client;
     protected Response $response;
 
     private string $body;
 
-    public function __construct(Client $request, Response $response)
+    public function __construct(Response $response)
     {
-        $this->client = $request;
         $this->response = $response;
         $this->body = $response->getBody();
         $response->getBody()->rewind();
@@ -67,16 +65,6 @@ final class ResponseData
         return $this->body;
     }
 
-    public function getRequestHeaders(): array
-    {
-        return $this->client->request->getHeaders();
-    }
-
-    public function getRequestHeader(string $header): array
-    {
-        return $this->client->getHeader($header);
-    }
-
     public function getStatusCode(): int
     {
         return $this->response->getStatusCode();
@@ -85,20 +73,5 @@ final class ResponseData
     public function success(): bool
     {
         return $this->response->getStatusCode() >= 200 and $this->response->getStatusCode() < 300;
-    }
-
-    public function getRequestParams(): array
-    {
-        return $this->client->options;
-    }
-
-    public function getRequestUrl(): string
-    {
-        return $this->client->request->getUri();
-    }
-
-    public function getEffectiveUrl(): string
-    {
-        return $this->client->stats->getEffectiveUri();
     }
 }

@@ -18,25 +18,6 @@ class Client extends \GuzzleHttp\Client
     public RequestInterface $request;
     public TransferStats $stats;
 
-    protected ?Closure $beforeRequest = null;
-    protected ?Closure $afterRequest = null;
-
-    /**
-     * @param Closure|null $beforeRequest
-     */
-    public function setBeforeRequest(?Closure $beforeRequest): void
-    {
-        $this->beforeRequest = $beforeRequest;
-    }
-
-    /**
-     * @param Closure|null $afterRequest
-     */
-    public function setAfterRequest(?Closure $afterRequest): void
-    {
-        $this->afterRequest = $afterRequest;
-    }
-
     /**
      * @param RequestInterface $request
      * @param array $options
@@ -54,23 +35,19 @@ class Client extends \GuzzleHttp\Client
         $this->options = $options;
         $this->request = $request;
 
-        if ($this->beforeRequest)
-            ($this->beforeRequest)($request, $options);
-
         try {
             $response = parent::send($request, $options);
         } catch (ClientException | ServerException $exception) {
             $response = $exception->getResponse();
         } catch (Exception $exception) {
-//            Log::error("Client Exception: ", [
-//                "Error" => $exception->getMessage(),
-//                "Url" => $request->getUri(),
-//                "Options" => $options,
-//            ]);
+            infoLog(json_encode([
+                "Client Exception: " => [
+                    "Error" => $exception->getMessage(),
+                    "Url" => $request->getUri(),
+                    "Options" => $options,
+                ]
+            ]));
         }
-
-        if ($this->afterRequest)
-            ($this->afterRequest)($request, $response, $options);
 
         return $response;
     }
