@@ -23,11 +23,20 @@ afterResponse(function () {
 
     $res = $client->send($req, json_decode(json_encode($request->options), true));
 
-    $req = new Request("POST", $request->callback);
+    $response = new ResponseData($res);
 
-    $client->send($req, [
+//    send response to callback
+
+    $callBackClient = new Client([
+        "timeout" => 60,
+        "verify" => false
+    ]);
+
+    $req1 = new Request("POST", $request->callback);
+
+    $callBackClient->send($req1, [
         "json" => [
-            "data" => serialize(new ResponseData($res))
+            "data" => serialize($response)
         ],
     ]);
 });
