@@ -10,23 +10,3 @@ function infoLog(string $data)
     fwrite($file, "[$logTime]: $data" . PHP_EOL);
     fclose($file);
 }
-
-function afterResponse(Closure $closure)
-{
-    set_time_limit(0);
-
-    ob_start();
-
-    echo json_encode([
-        "status" => "success"
-    ]);
-
-    header('Connection: close');
-    header('Content-Length: ' . ob_get_length());
-
-    ob_end_flush();
-    @ob_flush();
-    flush();
-
-    $closure();
-}
