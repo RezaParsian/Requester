@@ -33,14 +33,14 @@ $callBackClient = new Client([
 
 $req1 = new Request("POST", $request->callback);
 
-$callBackClient->send($req1, [
+$callbackResponse=$callBackClient->send($req1, [
     "json" => [
         "data" => serialize($response)
     ],
 ]);
 
 echo json_encode([
-    "status" => true,
+    "status" => (new ResponseData($callbackResponse))->success(),
     "time" => date("Y-m-d H:i:s")
 ]);
 
